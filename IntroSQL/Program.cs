@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace IntroSQL
 {
@@ -6,7 +8,14 @@ namespace IntroSQL
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            string connString = config.GetConnectionString("DefaultConnection");
+           
+
         }
     }
 }
