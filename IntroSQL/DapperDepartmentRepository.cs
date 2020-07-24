@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace IntroSQL
@@ -15,9 +16,20 @@ namespace IntroSQL
         }
         public IEnumerable<Department> GetAllDepartments()
         {
-           return _connection.Query<Department>("SELECT * FROM departments;");
+            
+            var depos = _connection.Query<Department>("Select * From departments").ToList();
+            return depos;
         }
-        
 
+        public void InsertDepartment(string newDepartmentName)
+        {
+            _connection.Execute("INSERT INTO DEPARTMENTS (Name) VALUES (@departmentName);",
+           new { departmentName = newDepartmentName });
+        }
     }
+
+
+
+
+
 }
