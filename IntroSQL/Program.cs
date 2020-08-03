@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using Ubiety.Dns.Core;
 
 namespace IntroSQL
 {
@@ -21,6 +22,29 @@ namespace IntroSQL
             string connString = config.GetConnectionString("DefaultConnection");
 
             IDbConnection conn = new MySqlConnection(connString);
+
+            var productsRepo = new DapperDepartmentRepository(conn);
+            Console.WriteLine($"What is the name of the new product?");
+            var productName = Console.ReadLine();
+
+            double priceOfProduct;
+            bool response;
+            do
+            {
+                Console.WriteLine($"How much does {productName} cost?");
+                response = double.TryParse(Console.ReadLine(), out priceOfProduct);
+            }while (response == false);
+
+            Console.WriteLine($"What is the CategoryID for {productName}?");
+            var categoryID = int.Parse(Console.ReadLine());
+
+            productsRepo.CreateProduct(productName, priceOfProduct, categoryID);
+           
+            var products = productsRepo.GetAllProducts();
+            foreach (var item in products)
+            {
+                Console.WriteLine($"{item.productID} {item.Name} {item.Price}");
+            }
 
             DapperDepartmentRepository repo = new DapperDepartmentRepository(conn);
 
